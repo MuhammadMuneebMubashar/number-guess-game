@@ -1,0 +1,16 @@
+import random
+levels = [10 , 20 , 50 , 100]
+choice = int(input("1.Easy (0 -10)\n2. Medium (0 - 20)\n3. Hard (0 - 50)\n4. Insane (0 - 100)\nPlease enter your choice : "))
+level_value = levels[choice-1]
+nums = [i for i in range(level_value+1)]
+compChoice = random.choice(nums)
+while True :
+    userChoice = input(f"Type 'exit' to end .\nOr enter guess number from 0 - {level_value} : ")
+    print(compChoice)
+    if userChoice == "exit":
+        break
+    elif str(compChoice) == userChoice:
+        print("You won")
+        compChoice = random.choice(nums)
+    else:
+        print(f"Try again")
