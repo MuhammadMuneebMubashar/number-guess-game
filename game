@@ -1,16 +1,63 @@
-import random
-levels = [10 , 20 , 50 , 100]
-choice = int(input("1.Easy (0 -10)\n2. Medium (0 - 20)\n3. Hard (0 - 50)\n4. Insane (0 - 100)\nPlease enter your choice : "))
-level_value = levels[choice-1]
-nums = [i for i in range(level_value+1)]
-compChoice = random.choice(nums)
-while True :
-    userChoice = input(f"Type 'exit' to end .\nOr enter guess number from 0 - {level_value} : ")
-    if userChoice == "exit":
-        print("Thanks for playing 🎈🥳")
+def ranged_input(statement, ranges=(0, 1)):
+  while True:
+    try:
+      x = int(input(f"{statement} from {ranges[0]} to {ranges[1]} : ").strip())
+      if ranges[0] <= x <= ranges[1]:
+        return x
+      else:
+        print("Please consider range ⚠️")
+    except:
+      print("Please enter numbers only ⚠️ !")
+def guess(total , correct , guess):
+  percent = (abs(correct - guess) * 100) // total
+  if percent >= 75: print("You are far away 🫨")
+  elif percent >= 50 : print("You are close 🎈")
+  else : print("You are too close 🎯")
+
+
+def random_num(maximum=10):
+  import random
+  lst = [i for i in range(1, maximum + 1)]
+  return random.choice(lst)
+def result(total , win):
+  if win != 0 or total == 0 : print(f"\n______\nTOTAL : {total} WON : {win} 🥳🎈\n______\n")
+  else : print(f"\n______\nTOTAL : {total} WON : {win} 😥😓\n______\n")
+def tries_msg(tries):
+  print(f"Tries left : {tries}" , end = " ")
+  if tries == 5: print("✅🎈")
+  elif tries >= 3 : print("🎯🎯")
+  elif tries >= 1: print("⚠️⚠️")
+  else : print("😥😓")
+def game():
+  levels = (10, 20, 50, 100)
+  total = 0
+  scores = 0
+  while True:
+    choice = ranged_input(
+      "\n\n1.Easy (1 -10)\n2. Medium (1 - 20)\n3. Hard (1 - 50)\n4. Insane (1 - 100)\nPlease enter your choice",(1, 4))
+    level_value = levels[choice - 1]
+    compChoice = random_num(level_value)
+    tries = 5
+    while True:
+      tries_msg(tries)
+      result(total , scores)
+      if tries == 0 : 
+        print(f"The original number was {compChoice}")
         break
-    elif str(compChoice) == userChoice:
-        print("You won 🥳🥳")
-        compChoice = random.choice(nums)
-    else:
-        print(f"Try again ❌")
+      userChoice = ranged_input(f"⭕⭕⭕⭕⭕⭕⭕⭕⭕\nTo exit game press -1\nTo change level Press 0\n⭕⭕⭕⭕⭕⭕⭕⭕⭕\nEnter guess number from 1 - {level_value}" , (-1, level_value))
+      if userChoice == -1:
+        print("\nThanks for playing 🎈🥳\n⭕⭕⭕⭕⭕⭕⭕")
+        return
+      elif userChoice == 0:
+        break
+      elif compChoice == userChoice:
+        print("\nYou won 🥳🥳\n")
+        tries = 5
+        scores += 1
+        compChoice = random_num(level_value)
+      else:
+        print("\nTry again ❌\n")
+        guess(level_value , compChoice , userChoice)
+        tries -= 1
+      total += 1
+game()
