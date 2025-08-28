@@ -1,16 +1,64 @@
 import random
-levels = [10 , 20 , 50 , 100]
-choice = int(input("1.Easy (0 -10)\n2. Medium (0 - 20)\n3. Hard (0 - 50)\n4. Insane (0 - 100)\nPlease enter your choice : "))
-level_value = levels[choice-1]
-nums = [i for i in range(level_value+1)]
-compChoice = random.choice(nums)
-while True :
-    userChoice = input(f"Type 'exit' to end .\nOr enter guess number from 0 - {level_value} : ")
-    print(compChoice)
-    if userChoice == "exit":
-        break
-    elif str(compChoice) == userChoice:
-        print("You won")
-        compChoice = random.choice(nums)
+
+def range_input(prompt, x = 0, y = 1):
+    while True:
+        try:
+            num = int(input(f"{prompt} : "))
+            if y>= num >= x:
+                return num
+            else:
+                print(f"Please enter number greater than or equal to {x}\
+                      and less than or equal to {y}")
+        except ValueError :
+            print("Please enter numbers only !")
+def level_choice():
+    print("1.Easy (0 -10)\n2. Medium (0 - 20)\n3. Hard (0 - 50)")
+    print("4. Insane (0 - 100\n5. Custom range\n6. Exit")
+    choice = range_input("Please enter your choice",
+                         x = 1 , y = 6)
+    return choice
+
+def comp_choice(choice):
+    if choice == 1:
+        return random.randint(0 , 10) , 0 , 10
+    elif choice == 2:
+        return random.randint(0 , 20) , 0 , 20
+    elif choice == 3:
+        return random.randint(0 , 50) , 0 , 50
+    elif choice == 4:
+        return random.randint(0 , 100) , 0 , 100
     else:
-        print(f"Try again")
+        x = range_input("Please enter lower range",
+                        0 ,  1000)
+        y = range_input("Please enter upper range",
+                        x , 100000)
+        return random.randint(x , y) , x , y
+
+
+def main():
+    print("Welcome to game ...")
+    while True:
+        choice = level_choice()
+        if choice == 6:
+            print("Thank you !")
+            return
+        comp , x , y= comp_choice(choice)
+        tries = 5
+        while tries != 0:
+            user = range_input("Please enter guess number",
+                               x , y)
+            if user == comp:
+                print("You won !")
+                break
+            else:
+                print("Try again !")
+                tries -= 1
+                print(f"{tries} tries left !")
+        else:
+            print("Empty tries !\nYou lose !")
+            print(f"Computer choice was {comp}")
+
+        
+
+if __name__ == "__main__":
+    main()
